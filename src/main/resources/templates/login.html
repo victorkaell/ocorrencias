@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<meta charset="UTF-8">
+<title>Login</title>
+<style>
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+.title {
+	align-content: flex-start;
+}
+.card {
+	width: 30vw;
+	border-radius: 20px;
+}
+.obrigatorio {
+	color: red;
+}
+.forgot {
+	display: flex;
+	justify-content: flex-end;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<div class="card">
+			<div class="card-content">
+				<h2 style="text-align: center;">Login</h2>
+				<form action="/login" method="post">
+					<p style="color: graytext;">
+						<span class="obrigatorio">*</span> Obrigatório
+					</p>
+					<div>
+						<label for="matricula" title="Preenchimento obrigatório">Matrícula:
+							<span class="obrigatorio">*</span>
+						</label> <input type="text" name="matricula" id="matricula" maxlength="20"
+							required autofocus>
+					</div>
+					<div>
+						<label for="senha" title="Preenchimento obrigatório">Senha:
+							<span class="obrigatorio">*</span>
+						</label> <input type="text" name="senha" id="senha" required>
+					</div>
+					<div class="button center">
+						<button type="submit" class="btn green darken-1">Acessar</button>
+					</div>
+				</form>
+				<a href="#"><span class="forgot">Esqueceu sua senha?</span></a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
