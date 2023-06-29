@@ -1,7 +1,10 @@
 package prototipo.ocorrencias.models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,8 +20,15 @@ public class Ocorrencia {
 	private String categoria;
 	private Long matricula;
 	private String nome;
+
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private LocalDate data;
+
+	@DateTimeFormat
 	private LocalTime horario;
+
+	private LocalDateTime tempo;
+
 	private String gatilho;
 
 	public Long getId() {
@@ -69,6 +79,14 @@ public class Ocorrencia {
 		this.horario = horario;
 	}
 
+	public LocalDateTime getTempo() {
+		return tempo;
+	}
+
+	public void setTempo(LocalDateTime tempo) {
+		this.tempo = tempo;
+	}
+
 	public String getGatilho() {
 		return gatilho;
 	}
@@ -80,6 +98,6 @@ public class Ocorrencia {
 	@Override
 	public String toString() {
 		return "Ocorrencia [id=" + id + ", categoria=" + categoria + ", matricula=" + matricula + ", nome=" + nome
-				+ ", data=" + data + ", horario=" + horario + ", gatilho=" + gatilho + "]";
+				+ ", data=" + data + ", horario=" + horario + ", tempo=" + tempo + ", gatilho=" + gatilho + "]";
 	}
 }
