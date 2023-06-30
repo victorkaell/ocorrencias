@@ -8,7 +8,6 @@ public class Usuario {
 	
 	@Id
 	private Long matricula;
-	private String email;
 	private String senha;
 
 	public Long getMatricula() {
@@ -17,14 +16,6 @@ public class Usuario {
 
 	public void setMatricula(Long matricula) {
 		this.matricula = matricula;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public String getSenha() {
@@ -37,6 +28,6 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return "Usuario [matricula=" + matricula + ", email=" + email + ", senha=" + senha + "]";
+		return "Usuario [matricula=" + matricula + ", senha=" + senha + "]";
 	}
 }

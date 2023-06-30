@@ -80,16 +80,14 @@
 							<table class="highlight">
 								<thead>
 									<tr>
-										<th>Matrícula</th>
-										<th>Email</th>
-										<th>Senha</th>
+										<th style="text-align: center;">Matrícula</th>
+										<th style="text-align: center;">Senha</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr th:each="u : ${usuarios}">
-										<td th:text="${u.matricula}">20221204010001</td>
-										<td th:text="${u.email}">kaelito@gmail.com</td>
-										<td th:text="${u.senha}">1234</td>
+										<td th:text="${u.matricula}" style="text-align: center;">20221204010001</td>
+										<td th:text="${u.senha}" style="text-align: center;">1234</td>
 										<td><a style="color: black;" th:href="@{/usuarios/listar_usuarios/{id}/excluir(id=${u.matricula})}" th:if="${u.matricula != usuario.matricula}" title="Excluir"><i class="material-icons">delete</i></a></td>
 									</tr>
 								</tbody>

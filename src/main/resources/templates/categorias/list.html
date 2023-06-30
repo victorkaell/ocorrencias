@@ -63,6 +63,14 @@
 	overflow-y: auto;
 	margin-top: 10px;
 }
+
+.row td {
+	text-align: center;
+}
+
+.row th {
+	text-align: center;
+}
 </style>
 </head>
 <body>
@@ -78,13 +86,13 @@
 						<div class="table-body">
 							<table class="highlight">
 								<thead>
-									<tr>
+									<tr class="row">
 										<th>ID</th>
 										<th>Nome</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="c : ${categorias}">
+									<tr th:each="c : ${categorias}" class="row">
 										<td th:text="${c.id}">1</td>
 										<td th:text="${c.nome}">Estudante</td>
 										<td><a th:href="@{/categorias/listar_categorias/{id}/mover_para_cima(id=${c.id})}" title="Mover para cima" style="color: black;"> <i
