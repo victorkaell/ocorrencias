@@ -6,6 +6,7 @@ import java.time.LocalTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,7 +29,8 @@ public class Ocorrencia {
 	private LocalTime horario;
 
 	private LocalDateTime tempo;
-
+	
+	@Column(length = 501)
 	private String gatilho;
 
 	public Long getId() {
