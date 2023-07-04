@@ -71,6 +71,14 @@
 .row th {
 	text-align: center;
 }
+
+.pages a, span {
+	color: green;
+}
+
+.pages a:hover {
+	text-decoration: underline;
+}
 </style>
 </head>
 <body>
@@ -88,12 +96,14 @@
 						<form th:action="@{/ocorrencias/listar_ocorrencias}" method="post"
 							style="width: 85%;">
 							<div style="display: flex;">
-								<input type="text" name="filtro" id="filtro"
-									placeholder="Pesquise pelo nome..."
-									style="padding: 5px;" autocomplete="off">
+								<input type="hidden" name="page" id="page" value="1"> <input
+									type="text" name="filtro" id="filtro"
+									placeholder="Pesquise pelo nome..." style="padding: 5px;"
+									autocomplete="off">
 								<div style="margin-left: 5px;">
-									<label style="margin-bottom: 10px; position: relative; top: -10px; right: 70px;">Categoria:</label> <select name="categoria"
-										id="categoria" class="browser-default"
+									<label
+										style="margin-bottom: 10px; position: relative; top: -10px; right: 70px;">Categoria:</label>
+									<select name="categoria" id="categoria" class="browser-default"
 										style="width: 200px; position: relative; bottom: 10px; border-radius: 10px;">
 										<option value="novalue" selected>----------</option>
 										<option th:each="c : ${categorias}" th:value="${c.nome}"
@@ -110,63 +120,75 @@
 							</div>
 						</form>
 						<div class="table-body">
-							<form action="">
-								<table class="highlight">
-									<thead>
-										<tr class="row">
-											<th>ID</th>
-											<th>Categoria</th>
-											<th>Matrícula</th>
-											<th>Nome <a
-												th:if="${requestURI != '/ocorrencias/listar_ocorrencias/nomeCrescente'}"
-												href="/ocorrencias/listar_ocorrencias/nomeCrescente"
-												style="color: black;"
-												title="Classificar por ordem alfabética"><i
-													class="material-icons"
-													style="vertical-align: sub; font-size: 18px;">sort_by_alpha</i></a><a
-												th:if="${requestURI == '/ocorrencias/listar_ocorrencias/nomeCrescente'}"
-												href="/ocorrencias/listar_ocorrencias/nomeDecrescente"
-												style="color: black;"
-												title="Classificar por ordem alfabética"><i
-													class="material-icons"
-													style="vertical-align: sub; font-size: 18px;">sort_by_alpha</i></a></th>
-											<th>Data <a
-												th:if="${requestURI != '/ocorrencias/listar_ocorrencias/dataCrescente'}"
-												href="/ocorrencias/listar_ocorrencias/dataCrescente"
-												style="color: black;" title="Ordenar pelo mais antigo"><i
-													class="material-icons"
-													style="vertical-align: sub; font-size: 18px;">history</i></a><a
-												th:if="${requestURI == '/ocorrencias/listar_ocorrencias/dataCrescente'}"
-												href="/ocorrencias/listar_ocorrencias/dataDecrescente"
-												style="color: black;" title="Ordenar pelo mais recente"><i
-													class="material-icons"
-													style="vertical-align: sub; font-size: 18px;">update</i></a></th>
-											<th>Horário</th>
-											<th>Gatilho</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="o : ${ocorrencias}" class="row">
-											<td th:text="${o.id}">1</td>
-											<td th:text="${o.categoria}">Estudante</td>
-											<td th:text="${o.matricula}">20221204010001</td>
-											<td th:text="${o.nome}">Victor Kaell</td>
-											<td th:text="${#temporals.format(o.data, 'dd/MM/yyyy')}">22/06/2023</td>
-											<td th:text="${o.horario}">16:30</td>
-											<td th:text="${o.gatilho}"
-												style="text-align: justify; max-width: 350px;">Falou a
-												palavra "Sapo"</td>
-											<td><a style="color: black;"
-												th:href="@{/ocorrencias/listar_ocorrencias/{id}/editar(id=${o.id})}"
-												title="Editar"><i class="material-icons">edit</i></a></td>
-											<td><a style="color: black;"
-												th:href="@{/ocorrencias/listar_ocorrencias/{id}/excluir(id=${o.id})}"
-												title="Excluir"><i class="material-icons">delete</i></a></td>
-											<td><input type="checkbox" class="filled-in"></td>
-										</tr>
-									</tbody>
-								</table>
+							<form method="GET">
+								<span class="pages left" style="font-size: 14px; width: 50%;">
+									Mostrando <span th:text="${pageSize}"></span> de <span th:text="${totalSize}"></span> itens | 
+									<a th:href="@{/ocorrencias/listar_ocorrencias(page=${page - 1})}" th:if="${requestURI == '/ocorrencias/listar_ocorrencias'}">< Anterior</a>
+									<a th:href="@{/ocorrencias/listar_ocorrencias/{filtro}(page=${page - 1}, filtro=${filtro})}" th:if="${requestURI != '/ocorrencias/listar_ocorrencias'}">< Anterior</a>
+									<span th:each="p : ${#numbers.sequence(1, pages)}" th:if="${p <= 5}"> 
+										<a th:href="@{/ocorrencias/listar_ocorrencias(page=${p})}" th:text="${p}" th:if="${requestURI == '/ocorrencias/listar_ocorrencias'}"></a>
+										<a th:href="@{/ocorrencias/listar_ocorrencias/{filtro}(page=${p}, filtro=${filtro})}" th:text="${p}" th:if="${requestURI != '/ocorrencias/listar_ocorrencias'}"></a>
+									</span> 
+									<input type="number" name="page" id="page" class="browser-default" style="width: 20%; border-radius: 2px; border-color: green;" th:if="${pages > 5}"> 
+									<a th:href="@{/ocorrencias/listar_ocorrencias(page=${page + 1})}" th:if="${requestURI == '/ocorrencias/listar_ocorrencias'}">Próximo ></a>
+									<a th:href="@{/ocorrencias/listar_ocorrencias/{filtro}(page=${page + 1}, filtro=${filtro})}" th:if="${requestURI != '/ocorrencias/listar_ocorrencias'}">Próximo ></a>
+								</span>
 							</form>
+							<table class="highlight">
+								<thead>
+									<tr class="row">
+										<th>ID</th>
+										<th>Categoria</th>
+										<th>Matrícula</th>
+										<th>Nome <a
+											th:if="${requestURI != '/ocorrencias/listar_ocorrencias/nomeCrescente'}"
+											href="/ocorrencias/listar_ocorrencias/nomeCrescente?page=1"
+											style="color: black;"
+											title="Classificar por ordem alfabética"><i
+												class="material-icons"
+												style="vertical-align: sub; font-size: 18px;">sort_by_alpha</i></a><a
+											th:if="${requestURI == '/ocorrencias/listar_ocorrencias/nomeCrescente'}"
+											href="/ocorrencias/listar_ocorrencias/nomeDecrescente?page=1"
+											style="color: black;"
+											title="Classificar por ordem alfabética"><i
+												class="material-icons"
+												style="vertical-align: sub; font-size: 18px;">sort_by_alpha</i></a></th>
+										<th>Data <a
+											th:if="${requestURI != '/ocorrencias/listar_ocorrencias/dataCrescente'}"
+											href="/ocorrencias/listar_ocorrencias/dataCrescente?page=1"
+											style="color: black;" title="Ordenar pelo mais antigo"><i
+												class="material-icons"
+												style="vertical-align: sub; font-size: 18px;">history</i></a><a
+											th:if="${requestURI == '/ocorrencias/listar_ocorrencias/dataCrescente'}"
+											href="/ocorrencias/listar_ocorrencias/dataDecrescente?page=1"
+											style="color: black;" title="Ordenar pelo mais recente"><i
+												class="material-icons"
+												style="vertical-align: sub; font-size: 18px;">update</i></a></th>
+										<th>Horário</th>
+										<th>Gatilho</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="o : ${ocorrencias}" class="row">
+										<td th:text="${o.id}">1</td>
+										<td th:text="${o.categoria}">Estudante</td>
+										<td th:text="${o.matricula}">20221204010001</td>
+										<td th:text="${o.nome}">Victor Kaell</td>
+										<td th:text="${#temporals.format(o.data, 'dd/MM/yyyy')}">22/06/2023</td>
+										<td th:text="${o.horario}">16:30</td>
+										<td th:text="${o.gatilho}"
+											style="text-align: justify; max-width: 350px;">Falou a
+											palavra "Sapo"</td>
+										<td><a style="color: black;"
+											th:href="@{/ocorrencias/listar_ocorrencias/{id}/editar(id=${o.id})}"
+											title="Editar"><i class="material-icons">edit</i></a></td>
+										<td><a style="color: black;"
+											th:href="@{/ocorrencias/listar_ocorrencias/{id}/excluir(id=${o.id})}"
+											title="Excluir"><i class="material-icons">delete</i></a></td>
+										<td><input type="checkbox" class="filled-in"></td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>

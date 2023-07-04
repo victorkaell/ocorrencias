@@ -36,12 +36,16 @@ public class OcorrenciasController {
 	private OcorrenciaRepository or;
 	
 	@GetMapping("/menu")
-	public String menuOcorrencias(Usuario usuario, RedirectAttributes attributes) {
+	public String menuOcorrencias(HttpServletRequest request, Usuario usuario, RedirectAttributes attributes) {
 		if (usuario.getMatricula() == null) {
 			attributes.addFlashAttribute("noperm", "Você não tem permissão para isso.");
 			
 			return "redirect:/login";
 		}
+		
+		List<Ocorrencia> ocorrencias = or.findAll();
+		
+		request.getSession().setAttribute("ocorrenciasFiltradas", ocorrencias);
 		
 		return "ocorrencias/menu";
 	}
@@ -76,10 +80,14 @@ public class OcorrenciasController {
 	}
 	
 	@GetMapping("/listar_ocorrencias")
-	public ModelAndView listarOcorrencias(HttpServletRequest request, Usuario usuario, RedirectAttributes attributes) {
+	public ModelAndView listarOcorrencias(HttpServletRequest request, Usuario usuario, RedirectAttributes attributes, @RequestParam("page") Integer page) {
 		ModelAndView mv = new ModelAndView();
 		List<Ocorrencia> ocorrencias = or.findAll();
 		List<Categoria> categorias = cr.findAll();
+		
+		@SuppressWarnings("unchecked")
+		List<Ocorrencia> ocorrenciasFiltradas = (List<Ocorrencia>) request.getSession().getAttribute("ocorrenciasFiltradas");
+		ArrayList<Ocorrencia> ocorrenciasPag = new ArrayList<>();
 		
 		if (usuario.getMatricula() == null) {
 			attributes.addFlashAttribute("noperm", "Você não tem permissão para isso.");
@@ -95,12 +103,80 @@ public class OcorrenciasController {
 			return mv;
 		}
 		
+		int contagem = 1;
+		int pages;
+		
+		if (ocorrenciasFiltradas == null) {
+			if (ocorrencias.size() % 10 == 0) {
+				pages = ocorrencias.size() / 10;
+			} else {
+				pages = (ocorrencias.size() / 10) + 1;
+			}
+			
+			System.out.println(pages);
+			
+			if (page < 1 || page > pages) {
+				mv.setViewName("redirect:/ocorrencias/listar_ocorrencias?page=1");
+				
+				return mv;
+			}
+			
+			for (int i = (page - 1) * 10; i < ocorrencias.size(); i++) {
+				Ocorrencia ocorrencia = ocorrencias.get(i);
+				ocorrenciasPag.add(ocorrencia);
+				
+				if (contagem == 10) {
+					break;
+				} else {
+					contagem++;
+				}
+			}
+		} else {
+			if (ocorrenciasFiltradas.size() % 10 == 0) {
+				pages = ocorrenciasFiltradas.size() / 10;
+			} else {
+				pages = (ocorrenciasFiltradas.size() / 10) + 1;
+			}
+			
+			System.out.println(pages);
+			
+			if (page < 1 || page > pages) {
+				mv.setViewName("redirect:/ocorrencias/listar_ocorrencias?page=1");
+				
+				return mv;
+			}
+			
+			for (int i = (page - 1) * 10; i < ocorrenciasFiltradas.size(); i++) {
+				Ocorrencia ocorrencia = ocorrenciasFiltradas.get(i);
+				ocorrenciasPag.add(ocorrencia);
+				
+				if (contagem == 10) {
+					break;
+				} else {
+					contagem++;
+				}
+			}
+		}
+		
 		String URLsite = request.getRequestURI();
-		request.getSession().setAttribute("ocorrenciasFiltradas", ocorrencias);
+		request.getSession().setAttribute("ocorrenciasPag", ocorrenciasPag);
+		request.getSession().setAttribute("ocorrenciasFiltradas", ocorrenciasFiltradas);
+		
+		System.out.println(pages);
 		
 		mv.setViewName("ocorrencias/list");
-		mv.addObject("ocorrencias", ocorrencias);
+		mv.addObject("ocorrencias", ocorrenciasPag);
 		mv.addObject("categorias", categorias);
+		mv.addObject("pages", pages);
+		mv.addObject("page", page);
+		mv.addObject("pageSize", ocorrenciasPag.size());
+		
+		if (ocorrenciasFiltradas == null) {
+			mv.addObject("totalSize", ocorrencias.size());
+		} else {
+			mv.addObject("totalSize", ocorrenciasFiltradas.size());
+		}
+		
 		mv.addObject("requestURI", URLsite);
 		
 		return mv;
@@ -185,13 +261,14 @@ public class OcorrenciasController {
 	}
 	
 	@PostMapping("/listar_ocorrencias")
-	public ModelAndView filtrarOcorrencia(Filtro filtro, HttpServletRequest request, RedirectAttributes attributes) {
+	public ModelAndView filtrarOcorrencia(Filtro filtro, HttpServletRequest request, RedirectAttributes attributes, @RequestParam("page") Integer page) {
 		ModelAndView mv = new ModelAndView();
 		
 		List<Ocorrencia> ocorrencias = or.findAll();
 		List<Categoria> categorias = cr.findAll();
 		
 		ArrayList<Ocorrencia> ocorrenciasFiltradas = new ArrayList<>();
+		ArrayList<Ocorrencia> ocorrenciasPag = new ArrayList<>();
 		
 		System.out.println("FILTRO: " + filtro);
 		
@@ -208,31 +285,64 @@ public class OcorrenciasController {
 		}
 		
 		if (ocorrenciasFiltradas.isEmpty()) {
-			mv.setViewName("redirect:/ocorrencias/listar_ocorrencias");
+			mv.setViewName("redirect:/ocorrencias/listar_ocorrencias?page=1");
 			
 			attributes.addFlashAttribute("error", "Nenhuma ocorrência correspondente foi encontrada.");
 			
 			return mv;
 		}
 		
+		int contagem = 1;
+		int pages;
+		
+		if (ocorrenciasFiltradas.size() % 10 == 0) {
+			pages = ocorrenciasFiltradas.size() / 10;
+		} else {
+			pages = (ocorrenciasFiltradas.size() / 10) + 1;
+		}
+		
+		if (page < 1 || page > pages) {
+			mv.setViewName("redirect:/ocorrencias/listar_ocorrencias?page=1");
+			
+			return mv;
+		}
+		
+		for (int i = (page - 1) * 10; i < ocorrenciasFiltradas.size(); i++) {
+			Ocorrencia ocorrencia = ocorrenciasFiltradas.get(i);
+			ocorrenciasPag.add(ocorrencia);
+			
+			if (contagem == 10) {
+				break;
+			} else {
+				contagem++;
+			}
+		}
+		
 		request.getSession().setAttribute("ocorrenciasFiltradas", ocorrenciasFiltradas);
+		request.getSession().setAttribute("ocorrenciasPag", ocorrenciasPag);
 		
 		String URLsite = request.getRequestURI();
 		
-		mv.addObject("ocorrencias", ocorrenciasFiltradas);
+		mv.setViewName("ocorrencias/list");
+		mv.addObject("ocorrencias", ocorrenciasPag);
 		mv.addObject("categorias", categorias);
+		mv.addObject("pages", pages);
+		mv.addObject("page", page);
+		mv.addObject("pageSize", ocorrenciasPag.size());
+		mv.addObject("totalSize", ocorrenciasFiltradas.size());
 		mv.addObject("requestURI", URLsite);
-		mv.setViewName("/ocorrencias/list");
 		
 		return mv;
 	}
 	
 	@GetMapping("/listar_ocorrencias/{filtro}")
-	public ModelAndView ordenarPorCategoria(Usuario usuario, RedirectAttributes attributes, HttpServletRequest request, @PathVariable String filtro) {
+	public ModelAndView ordenarPorCategoria(Usuario usuario, RedirectAttributes attributes, HttpServletRequest request, @PathVariable String filtro, @RequestParam("page") Integer page) {
 		ModelAndView mv = new ModelAndView();
 		
 		@SuppressWarnings("unchecked")
 		List<Ocorrencia> ocorrenciasFiltradas = (List<Ocorrencia>) request.getSession().getAttribute("ocorrenciasFiltradas");
+		ArrayList<Ocorrencia> ocorrenciasPag = new ArrayList<>();
+		
 		List<Categoria> categorias = cr.findAll();
 		
 		if (ocorrenciasFiltradas == null) {
@@ -257,16 +367,49 @@ public class OcorrenciasController {
 		} else if (filtro.equals("nomeCrescente")) {
 			ocorrenciasFiltradas.sort(Comparator.comparing(Ocorrencia::getNome));
 		} else {
-			mv.setViewName("redirect:/ocorrencias/listar_ocorrencias");
+			mv.setViewName("redirect:/ocorrencias/listar_ocorrencias?page=1");
 			
 			return mv;
 		}
 		
+		int pages, contagem = 1;
+		
+		if (ocorrenciasFiltradas.size() % 10 == 0) {
+			pages = ocorrenciasFiltradas.size() / 10;
+		} else {
+			pages = (ocorrenciasFiltradas.size() / 10) + 1;
+		}
+		
+		if (page < 1 || page > pages) {
+			mv.setViewName("redirect:/ocorrencias/listar_ocorrencias?page=1");
+			
+			return mv;
+		}
+		
+		for (int i = (page - 1) * 10; i < ocorrenciasFiltradas.size(); i++) {
+			Ocorrencia ocorrencia = ocorrenciasFiltradas.get(i);
+			ocorrenciasPag.add(ocorrencia);
+			
+			if (contagem == 10) {
+				break;
+			} else {
+				contagem++;
+			}
+		}
+		
 		String URLsite = request.getRequestURI();
 		
+		request.getSession().setAttribute("ocorrenciasFiltradas", ocorrenciasFiltradas);
+		request.getSession().setAttribute("ocorrenciasPag", ocorrenciasPag);
+		
 	    mv.setViewName("/ocorrencias/list");
-		mv.addObject("ocorrencias", ocorrenciasFiltradas);
+		mv.addObject("ocorrencias", ocorrenciasPag);
 		mv.addObject("categorias", categorias);
+		mv.addObject("pages", pages);
+		mv.addObject("page", page);
+		mv.addObject("filtro", filtro);
+		mv.addObject("pageSize", ocorrenciasPag.size());
+		mv.addObject("totalSize", ocorrenciasFiltradas.size());
 		mv.addObject("requestURI", URLsite);
 		
 		return mv;
