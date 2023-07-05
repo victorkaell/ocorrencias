@@ -44,7 +44,7 @@ public class OcorrenciasController {
 		}
 		
 		List<Ocorrencia> ocorrencias = or.findAll();
-		
+	
 		request.getSession().setAttribute("ocorrenciasFiltradas", ocorrencias);
 		
 		return "ocorrencias/menu";
@@ -82,6 +82,7 @@ public class OcorrenciasController {
 	@GetMapping("/listar_ocorrencias")
 	public ModelAndView listarOcorrencias(HttpServletRequest request, Usuario usuario, RedirectAttributes attributes, @RequestParam("page") Integer page) {
 		ModelAndView mv = new ModelAndView();
+		
 		List<Ocorrencia> ocorrencias = or.findAll();
 		List<Categoria> categorias = cr.findAll();
 		
@@ -113,8 +114,6 @@ public class OcorrenciasController {
 				pages = (ocorrencias.size() / 10) + 1;
 			}
 			
-			System.out.println(pages);
-			
 			if (page < 1 || page > pages) {
 				mv.setViewName("redirect:/ocorrencias/listar_ocorrencias?page=1");
 				
@@ -138,8 +137,6 @@ public class OcorrenciasController {
 				pages = (ocorrenciasFiltradas.size() / 10) + 1;
 			}
 			
-			System.out.println(pages);
-			
 			if (page < 1 || page > pages) {
 				mv.setViewName("redirect:/ocorrencias/listar_ocorrencias?page=1");
 				
@@ -161,8 +158,6 @@ public class OcorrenciasController {
 		String URLsite = request.getRequestURI();
 		request.getSession().setAttribute("ocorrenciasPag", ocorrenciasPag);
 		request.getSession().setAttribute("ocorrenciasFiltradas", ocorrenciasFiltradas);
-		
-		System.out.println(pages);
 		
 		mv.setViewName("ocorrencias/list");
 		mv.addObject("ocorrencias", ocorrenciasPag);
@@ -240,7 +235,7 @@ public class OcorrenciasController {
 	}
 	
 	@GetMapping("/listar_ocorrencias/{id}/excluir/confirmar")
-	public String excluirOcorrencia(@PathVariable Long id, Usuario usuario, RedirectAttributes attributes) {
+	public String excluirOcorrencia(HttpServletRequest request, @PathVariable Long id, Usuario usuario, RedirectAttributes attributes) {
 		Optional<Ocorrencia> opt = or.findById(id);
 		
 		if (opt.isEmpty()) {
@@ -257,7 +252,11 @@ public class OcorrenciasController {
 		
 		or.delete(ocorrencia);
 		
-		return "redirect:/ocorrencias/listar_ocorrencias";
+		List<Ocorrencia> ocorrencias = or.findAll();
+		
+		request.getSession().setAttribute("ocorrenciasFiltradas", ocorrencias);
+		
+		return "redirect:/ocorrencias/listar_ocorrencias?page=1";
 	}
 	
 	@PostMapping("/listar_ocorrencias")
