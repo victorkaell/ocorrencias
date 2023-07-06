@@ -1,6 +1,6 @@
-package prototipo.ocorrencias.models;
+package prototipo.ocorrencias.dtos;
 
-public class TempUsuario {
+public class UsuarioSenhaTemporariaDTO {
 
 	private Long matricula;
 	private String senha;

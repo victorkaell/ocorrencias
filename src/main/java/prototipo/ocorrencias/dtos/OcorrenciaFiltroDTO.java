@@ -1,6 +1,6 @@
-package prototipo.ocorrencias.models;
+package prototipo.ocorrencias.dtos;
 
-public class Filtro {
+public class OcorrenciaFiltroDTO {
 
 	private String filtro;
 	private String categoria;

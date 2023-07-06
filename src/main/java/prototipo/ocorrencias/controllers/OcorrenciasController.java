@@ -18,8 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
+import prototipo.ocorrencias.dtos.OcorrenciaFiltroDTO;
 import prototipo.ocorrencias.models.Categoria;
-import prototipo.ocorrencias.models.Filtro;
 import prototipo.ocorrencias.models.Ocorrencia;
 import prototipo.ocorrencias.models.Usuario;
 import prototipo.ocorrencias.repositories.CategoriaRepository;
@@ -260,7 +260,7 @@ public class OcorrenciasController {
 	}
 	
 	@PostMapping("/listar_ocorrencias")
-	public ModelAndView filtrarOcorrencia(Filtro filtro, HttpServletRequest request, RedirectAttributes attributes, @RequestParam("page") Integer page) {
+	public ModelAndView filtrarOcorrencia(OcorrenciaFiltroDTO filtro, HttpServletRequest request, RedirectAttributes attributes, @RequestParam("page") Integer page) {
 		ModelAndView mv = new ModelAndView();
 		
 		List<Ocorrencia> ocorrencias = or.findAll();

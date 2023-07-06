@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import prototipo.ocorrencias.models.TempUsuario;
+import prototipo.ocorrencias.dtos.UsuarioSenhaTemporariaDTO;
 import prototipo.ocorrencias.models.Usuario;
 import prototipo.ocorrencias.repositories.UsuarioRepository;
 
@@ -25,12 +25,6 @@ public class IndexController {
 	@GetMapping("/")
 	public String index(Usuario usuario) {
 		return "redirect:/login";
-		
-		// if (usuario.getMatricula() == null) {
-		//	return "redirect:/login";
-		//}
-		
-		//return "redirect:/home";
 	}
 	
 	@GetMapping("/login") 
@@ -75,7 +69,7 @@ public class IndexController {
 	}
 	
 	@PostMapping("/login/forgot")
-	public String redefinirSenha(TempUsuario tempUsuario, RedirectAttributes attributes) {
+	public String redefinirSenha(UsuarioSenhaTemporariaDTO tempUsuario, RedirectAttributes attributes) {
 		List<Usuario> usuarios = ur.findAll();
 		
 		if (!(tempUsuario.getSenha().equals(tempUsuario.getConfirmacao()))) {
