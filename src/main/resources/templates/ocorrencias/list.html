@@ -127,17 +127,17 @@
 							<form method="GET">
 								<span class="pages left" style="font-size: 14px; width: 50%;">
 									Mostrando <span th:text="${pageSize}"></span> de <span th:text="${totalSize}"></span> itens <span th:if="${pages > 1}">| </span> 
-									<a th:href="@{/ocorrencias/listar_ocorrencias(page=${page - 1})}" th:if="${requestURI == '/ocorrencias/listar_ocorrencias' and pages > 1}">< Anterior</a>
-									<a th:href="@{/ocorrencias/listar_ocorrencias/{filtro}(page=${page - 1}, filtro=${filtro})}" th:if="${requestURI != '/ocorrencias/listar_ocorrencias' and pages > 1}">< Anterior</a>
+									<a th:href="@{/ocorrencias/listar_ocorrencias(page=${page - 1})}" th:if="${requestURI == '/ocorrencias/listar_ocorrencias' and pages > 1}">Anterior</a>
+									<a th:href="@{/ocorrencias/listar_ocorrencias/{filtro}(page=${page - 1}, filtro=${filtro})}" th:if="${requestURI != '/ocorrencias/listar_ocorrencias' and pages > 1}">Anterior</a>
 									<span th:each="p : ${#numbers.sequence(1, pages)}" th:if="${p <= 5 and pages > 1}"> 
 										<a th:href="@{/ocorrencias/listar_ocorrencias(page=${p})}" th:text="${p}" th:if="${requestURI == '/ocorrencias/listar_ocorrencias'}"></a>
 										<a th:href="@{/ocorrencias/listar_ocorrencias/{filtro}(page=${p}, filtro=${filtro})}" th:text="${p}" th:if="${requestURI != '/ocorrencias/listar_ocorrencias'}"></a>
 									</span> 
 									<input type="number" name="page" id="page" class="browser-default" style="width: 20%; border-radius: 2px; border-color: green;" th:if="${pages > 5}"> 
-									<a th:href="@{/ocorrencias/listar_ocorrencias(page=${page + 1})}" th:if="${requestURI == '/ocorrencias/listar_ocorrencias' and pages > 1}">Próximo ></a>
-									<a th:href="@{/ocorrencias/listar_ocorrencias/{filtro}(page=${page + 1}, filtro=${filtro})}" th:if="${requestURI != '/ocorrencias/listar_ocorrencias' and pages > 1}">Próximo ></a>
-									<a th:href="@{/ocorrencias/listar_ocorrencias(page=${pages})}" th:if="${requestURI == '/ocorrencias/listar_ocorrencias' and pages > 1}">Último >></a>
-									<a th:href="@{/ocorrencias/listar_ocorrencias/{filtro}(page=${pages}, filtro=${filtro})}" th:if="${requestURI != '/ocorrencias/listar_ocorrencias' and pages > 1}">Último >></a>
+									<a th:href="@{/ocorrencias/listar_ocorrencias(page=${page + 1})}" th:if="${requestURI == '/ocorrencias/listar_ocorrencias' and pages > 1}">Próximo</a>
+									<a th:href="@{/ocorrencias/listar_ocorrencias/{filtro}(page=${page + 1}, filtro=${filtro})}" th:if="${requestURI != '/ocorrencias/listar_ocorrencias' and pages > 1}">Próximo</a>
+									<a th:href="@{/ocorrencias/listar_ocorrencias(page=${pages})}" th:if="${requestURI == '/ocorrencias/listar_ocorrencias' and pages > 1}">Último</a>
+									<a th:href="@{/ocorrencias/listar_ocorrencias/{filtro}(page=${pages}, filtro=${filtro})}" th:if="${requestURI != '/ocorrencias/listar_ocorrencias' and pages > 1}">Último</a>
 								</span>
 							</form>
 							<table class="highlight">
