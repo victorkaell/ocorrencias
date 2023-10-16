@@ -39,7 +39,7 @@
 }
 
 .background {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -51,7 +51,7 @@
 }
 
 .ifrn-logo {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 370px;
@@ -172,6 +172,7 @@
 												style="vertical-align: sub; font-size: 18px;">update</i></a></th>
 										<th>Horário</th>
 										<th>Gatilho</th>
+										<th>Método de Tratamento</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -185,13 +186,14 @@
 										<td th:text="${o.gatilho}"
 											style="text-align: justify; max-width: 350px;">Falou a
 											palavra "Sapo"</td>
+										<td th:text="${o.tratamento}"
+											style="text-align: justify; max-width: 350px;">Deitar-se na maca</td>
 										<td><a style="color: black;"
 											th:href="@{/ocorrencias/listar_ocorrencias/{id}/editar(id=${o.id})}"
 											title="Editar"><i class="material-icons">edit</i></a></td>
 										<td><a style="color: black;"
 											th:href="@{/ocorrencias/listar_ocorrencias/{id}/excluir(id=${o.id})}"
 											title="Excluir"><i class="material-icons">delete</i></a></td>
-										<td><input type="checkbox" class="filled-in"></td>
 									</tr>
 								</tbody>
 							</table>

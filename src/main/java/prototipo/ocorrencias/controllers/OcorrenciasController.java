@@ -72,6 +72,7 @@ public class OcorrenciasController {
 	public String cadastrarOcorrencia(Ocorrencia ocorrencia, @RequestParam Categoria categoria) {
 		ocorrencia.setCategoria(categoria.getNome());
 		ocorrencia.setTempo(LocalDateTime.of(ocorrencia.getData(), ocorrencia.getHorario()));
+		
 		System.out.println(ocorrencia);
 		
 		or.saveAndFlush(ocorrencia);

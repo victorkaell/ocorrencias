@@ -119,6 +119,13 @@
 						</label> <input type="text" name="gatilho" id="gatilho" th:value="${ocorrencia.gatilho}" maxlength="500"
 							autocomplete="off" required>
 					</div>
+					<div style="margin-bottom: 10px;">
+						<label for="tratamento" title="Preenchimento obrigatório"
+							style="font-size: 15px;">Método de Tratamento <span
+							class="obrigatorio">*</span>
+						</label> <input type="text" name="tratamento" id="tratamento" th:value="${ocorrencia.tratamento}" maxlength="500"
+							autocomplete="off" required>
+					</div>
 					<div>
 						<input type="hidden" name="id" id="id" th:value="${ocorrencia.id}" readonly>
 					</div>
