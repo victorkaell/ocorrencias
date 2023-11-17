@@ -178,6 +178,32 @@ public class OcorrenciasController {
 		return mv;
 	}
 	
+	@GetMapping("/listar_ocorrencias/{id}/detalhes")
+	public ModelAndView detalharOcorrencia(@PathVariable Long id, Usuario usuario, RedirectAttributes attributes) {
+		ModelAndView mv = new ModelAndView();
+		Optional<Ocorrencia> opt = or.findById(id);
+		
+		if (opt.isEmpty()) {
+			mv.setViewName("redirect:/home");
+			
+			return mv;
+		}
+		
+		if (usuario.getMatricula() == null) {
+			attributes.addFlashAttribute("noperm", "Você não tem permissão para isso.");
+			mv.setViewName("redirect:/login");
+			
+			return mv;
+		}
+		
+		Ocorrencia ocorrencia = opt.get();
+		mv.addObject("ocorrencia", ocorrencia);
+		
+		mv.setViewName("ocorrencias/detalhes");
+		
+		return mv;
+	}
+	
 	@GetMapping("/listar_ocorrencias/{id}/editar")
 	public ModelAndView selecionarOcorrencia(@PathVariable Long id, Usuario usuario, RedirectAttributes attributes) {
 		ModelAndView mv = new ModelAndView();

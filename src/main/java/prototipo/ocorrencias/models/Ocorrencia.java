@@ -32,9 +32,6 @@ public class Ocorrencia {
 	
 	@Column(length = 501)
 	private String gatilho;
-	
-	@Column(length = 501)
-	private String tratamento;
 
 	public Long getId() {
 		return id;
@@ -100,18 +97,9 @@ public class Ocorrencia {
 		this.gatilho = gatilho;
 	}
 
-	public String getTratamento() {
-		return tratamento;
-	}
-
-	public void setTratamento(String tratamento) {
-		this.tratamento = tratamento;
-	}
-
 	@Override
 	public String toString() {
 		return "Ocorrencia [id=" + id + ", categoria=" + categoria + ", matricula=" + matricula + ", nome=" + nome
-				+ ", data=" + data + ", horario=" + horario + ", tempo=" + tempo + ", gatilho=" + gatilho
-				+ ", tratamento=" + tratamento + "]";
+				+ ", data=" + data + ", horario=" + horario + ", tempo=" + tempo + ", gatilho=" + gatilho + "]";
 	}
 }
