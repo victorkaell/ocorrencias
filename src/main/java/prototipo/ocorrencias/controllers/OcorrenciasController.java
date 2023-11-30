@@ -21,9 +21,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import prototipo.ocorrencias.dtos.OcorrenciaFiltroDTO;
 import prototipo.ocorrencias.models.Categoria;
 import prototipo.ocorrencias.models.Ocorrencia;
+import prototipo.ocorrencias.models.Tratamento;
 import prototipo.ocorrencias.models.Usuario;
 import prototipo.ocorrencias.repositories.CategoriaRepository;
 import prototipo.ocorrencias.repositories.OcorrenciaRepository;
+import prototipo.ocorrencias.repositories.TratamentoRepository;
 
 @Controller
 @SessionAttributes("usuario")
@@ -34,6 +36,8 @@ public class OcorrenciasController {
 	private CategoriaRepository cr;
 	@Autowired
 	private OcorrenciaRepository or;
+	@Autowired
+	private TratamentoRepository tr;
 	
 	@GetMapping("/menu")
 	public String menuOcorrencias(HttpServletRequest request, Usuario usuario, RedirectAttributes attributes) {
@@ -69,13 +73,19 @@ public class OcorrenciasController {
 	}
 	
 	@PostMapping("/cadastrar_ocorrencia")
-	public String cadastrarOcorrencia(Ocorrencia ocorrencia, @RequestParam Categoria categoria) {
+	public String cadastrarOcorrencia(Ocorrencia ocorrencia, Tratamento tratamento, @RequestParam String metodo, @RequestParam Categoria categoria) {
 		ocorrencia.setCategoria(categoria.getNome());
 		ocorrencia.setTempo(LocalDateTime.of(ocorrencia.getData(), ocorrencia.getHorario()));
 		
-		System.out.println(ocorrencia);
-		
 		or.saveAndFlush(ocorrencia);
+		
+		tratamento.setOcorrencia(ocorrencia);
+		tratamento.setMetodo(metodo);
+		System.out.println(tratamento);
+		
+		tr.save(tratamento);
+		
+		System.out.println(ocorrencia);
 		
 		return "redirect:/ocorrencias/menu";
 	}
@@ -199,9 +209,35 @@ public class OcorrenciasController {
 		Ocorrencia ocorrencia = opt.get();
 		mv.addObject("ocorrencia", ocorrencia);
 		
+		List<Tratamento> tratamentos = tr.findByOcorrencia(ocorrencia);
+		mv.addObject("tratamentos", tratamentos);
+		
 		mv.setViewName("ocorrencias/detalhes");
 		
 		return mv;
+	}
+	
+	@PostMapping("/listar_ocorrencias/{id}/detalhes/adicionar")
+	public String adicionarTratamento(@PathVariable Long id, Tratamento tratamento, Usuario usuario, RedirectAttributes attributes) {
+		Optional<Ocorrencia> opt = or.findById(id);
+		
+		if (opt.isEmpty()) {
+			return "redirect:/home";
+		}
+		
+		if (usuario.getMatricula() == null) {
+			attributes.addFlashAttribute("noperm", "Você não tem permissão para isso.");
+			
+			return "redirect:/login";
+		}
+		
+		Ocorrencia ocorrencia = opt.get();
+		
+		tratamento.setOcorrencia(ocorrencia);
+		
+		tr.save(tratamento);
+		
+		return "redirect:/ocorrencias/listar_ocorrencias/" + id + "/detalhes";
 	}
 	
 	@GetMapping("/listar_ocorrencias/{id}/editar")
@@ -225,11 +261,41 @@ public class OcorrenciasController {
 		
 		Ocorrencia ocorrencia = opt.get();
 		
+		List<Tratamento> tratamentos = tr.findByOcorrencia(ocorrencia);
+		
 		mv.setViewName("ocorrencias/edicao");
 		mv.addObject("ocorrencia", ocorrencia);
+		mv.addObject("tratamentos", tratamentos);
 		mv.addObject("categorias", categorias);
 		
 		System.out.println(ocorrencia);
+		
+		return mv;
+	}
+	
+	@PostMapping("/listar_ocorrencias/{id}/editar")
+	public ModelAndView editarOcorrencia(@PathVariable Long id, Usuario usuario, Ocorrencia ocorrencia, Tratamento tratamento, RedirectAttributes attributes, HttpServletRequest request, @RequestParam Long categoria) {
+		ModelAndView mv = new ModelAndView();
+		
+		tr.save(tratamento);
+		
+		Optional<Categoria> opt = cr.findById(categoria);
+		
+		if (!opt.isEmpty()) {
+			Categoria categoriaParam = opt.get();
+			
+			ocorrencia.setCategoria(categoriaParam.getNome());
+			or.saveAndFlush(ocorrencia);
+		}
+		
+		System.out.println(tratamento);
+		System.out.println(ocorrencia);
+		
+		List<Ocorrencia> ocorrencias = or.findAll();
+		
+		request.getSession().setAttribute("ocorrenciasFiltradas", ocorrencias);
+		
+		mv.setViewName("redirect:/ocorrencias/listar_ocorrencias?page=1");
 		
 		return mv;
 	}
@@ -261,6 +327,34 @@ public class OcorrenciasController {
 		return mv;
 	}
 	
+	@GetMapping("/listar_ocorrencias/{id}/detalhes/{idTratamento}/excluir")
+	public ModelAndView excluirTratamento(@PathVariable Long id, @PathVariable Long idTratamento, Usuario usuario, RedirectAttributes attributes) {
+		ModelAndView mv = new ModelAndView();
+		Optional<Ocorrencia> opt = or.findById(id);
+		Optional<Tratamento> optTratamento = tr.findById(idTratamento);
+		
+		if (opt.isEmpty() || optTratamento.isEmpty()) {
+			mv.setViewName("redirect:/home");
+			
+			return mv;
+		}
+		
+		if (usuario.getMatricula() == null) {
+			mv.setViewName("redirect:/login");
+			
+			attributes.addFlashAttribute("noperm", "Você não tem permissão para isso.");
+			
+			return mv;
+		}
+		
+		Tratamento tratamento = optTratamento.get();
+		tr.delete(tratamento);
+		
+		mv.setViewName("redirect:/ocorrencias/listar_ocorrencias/" + id + "/detalhes");
+		
+		return mv;
+	}
+	
 	@GetMapping("/listar_ocorrencias/{id}/excluir/confirmar")
 	public String excluirOcorrencia(HttpServletRequest request, @PathVariable Long id, Usuario usuario, RedirectAttributes attributes) {
 		Optional<Ocorrencia> opt = or.findById(id);
@@ -277,6 +371,9 @@ public class OcorrenciasController {
 		
 		Ocorrencia ocorrencia = opt.get();
 		
+		List<Tratamento> tratamentos = tr.findByOcorrencia(ocorrencia);
+		
+		tr.deleteAll(tratamentos);
 		or.delete(ocorrencia);
 		
 		List<Ocorrencia> ocorrencias = or.findAll();
