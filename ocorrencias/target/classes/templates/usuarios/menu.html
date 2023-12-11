@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+<meta charset="UTF-8">
+<title>Usuários - Menu</title>
+<link rel="shortcut icon" th:href="@{/logo-ifrn-quadrada.png}">
+<style>
+.container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	height: 90vh;
+	width: 100vw;
+	align-items: center;
+}
+
+.card {
+	border-radius: 50px;
+	width: 400px;
+	height: 400px;
+	transition: transform 0.3s ease;
+}
+
+.card:hover {
+	transform: scale(1.01);
+}
+
+.card-content {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.link {
+	color: black;
+}
+
+.background {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-position: center;
+	z-index: -1;
+	user-select: none;
+}
+
+.ifrn-logo {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 370px;
+	height: 120px;
+	flex-wrap: wrap;
+	display: flex;
+	user-select: none;
+}
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #32a041;
+}
+
+li {
+	float: left;
+}
+
+li a {
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+	background-color: #c8191e;
+}
+</style>
+</head>
+<body>
+	<ul>
+		<li><a href="/home">Home</a></li>
+		<li><a href="/categorias/menu">Categorias</a></li>
+		<li><a href="/usuarios/menu">Usuários</a></li>
+		<li><a href="/ocorrencias/menu">Ocorrências</a></li>
+		<li><a href="/relatorios/menu">Relatórios</a></li>
+	</ul>
+
+	<img th:src="@{/login-background.png}" class="background"></img>
+	<div class="container">
+		<div class="row">
+			<div class="col s6">
+				<div class="card z-depth-3 hoverable">
+					<div class="card-content">
+						<div class="center">
+							<a class="link" href="/usuarios/cadastrar_usuario"> <span
+								class="card-title" style="font-size: 50px; margin-bottom: 40px;"><strong>Cadastrar</strong></span>
+								<i class="large material-icons" style="font-size: 170px;">add_circle_outline</i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col s6">
+				<div class="card z-depth-3 hoverable">
+					<div class="card-content">
+						<div class="center">
+							<a class="link" href="/usuarios/listar_usuarios"> <span
+								class="card-title" style="font-size: 50px; margin-bottom: 40px;"><strong>Listar</strong></span>
+								<i class="large material-icons" style="font-size: 170px;">list</i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

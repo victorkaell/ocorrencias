@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<meta charset="UTF-8">
+<title>Redefinição de Senha</title>
+<link rel="shortcut icon" th:href="@{/logo-ifrn-quadrada.png}">
+<style>
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+.title {
+	align-content: flex-start;
+}
+
+.card {
+	width: 30vw;
+	border-radius: 20px;
+}
+
+.obrigatorio {
+	color: red;
+}
+
+.background {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-position: center;
+	z-index: -1;
+	user-select: none;
+}
+
+.ifrn-logo {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 370px;
+	height: 120px;
+	flex-wrap: wrap;
+	display: flex;
+	user-select: none;
+}
+
+.btn {
+	width: 100%;
+}
+</style>
+</head>
+<body>
+	<a href="/login"><img th:src="@{/logo-ifrn-horizontal.png}" class="ifrn-logo"></a>
+	<img th:src="@{/login-background.png}" class="background">
+	<div class="container">
+		<div class="card z-depth-2">
+			<div class="card-content">
+				<h2 style="text-align: center;">Alterar Senha</h2>
+				<form action="/login/forgot" method="post">
+					<p style="color: graytext; font-size: 13px;">
+						<span class="obrigatorio">*</span> Campo obrigatório
+					</p>
+					<p th:if="${error}" th:text="${error}" style="color: red;"></p>
+					<div>
+						<label for="matricula" title="Preenchimento obrigatório"
+							style="font-size: 15px;">Matrícula <span
+							class="obrigatorio">*</span>
+						</label> <input type="text" name="matricula" id="matricula" maxlength="18"
+							required autofocus>
+					</div>
+					<div>
+						<label for="senha" title="Preenchimento obrigatório"
+							style="font-size: 15px;">Nova senha <span class="obrigatorio">*</span>
+						</label> <input type="password" name="senha" id="senha" required>
+					</div>
+					<div style="margin-bottom: 10px;">
+						<label for="confirmacao" title="Preenchimento obrigatório"
+							style="font-size: 15px;">Confirme sua senha <span
+							class="obrigatorio">*</span>
+						</label> <input type="password" name="confirmacao" id="confirmacao" required>
+					</div>
+					<div>
+						<button type="submit" class="btn green darken-2">Redefinir</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
