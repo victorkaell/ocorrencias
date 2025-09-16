@@ -395,15 +395,14 @@ public class OcorrenciasController {
 		
 		System.out.println("FILTRO: " + filtro);
 		
-		for (int i = 0; i < ocorrencias.size(); i++) {
-			Ocorrencia ocorrencia = ocorrencias.get(i);
-			String ocorrenciaNome = ocorrencia.getNome();
-			String ocorrenciaCategoria = ocorrencia.getCategoria();
+		for (Ocorrencia ocorrencia : ocorrencias) {
+			String ocorrenciaNome = ocorrencia.getNome() == null ? "" : ocorrencia.getNome();
+			String filtroNome = filtro.getFiltro() == null ? "" : filtro.getFiltro();
 			
-			if (ocorrenciaNome.toUpperCase().contains(filtro.getFiltro().toUpperCase()) && ocorrenciaCategoria.equals(filtro.getCategoria())) {
-				ocorrenciasFiltradas.add(ocorrencia);
-			} else if (ocorrenciaNome.toUpperCase().contains(filtro.getFiltro().toUpperCase()) && filtro.getCategoria().equals("novalue")) {
-				ocorrenciasFiltradas.add(ocorrencia);
+			if (ocorrenciaNome.toUpperCase().contains(filtroNome.toUpperCase())) {
+				if (filtro.getCategoria().equals("novalue") || filtro.getCategoria().equals(ocorrencia.getCategoria())) {
+					ocorrenciasFiltradas.add(ocorrencia);
+				}
 			}
 		}
 		
