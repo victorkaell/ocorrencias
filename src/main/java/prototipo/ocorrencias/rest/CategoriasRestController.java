@@ -1,4 +1,4 @@
-package prototipo.ocorrencias.controllers;
+package prototipo.ocorrencias.rest;
 
 import java.util.List;
 
