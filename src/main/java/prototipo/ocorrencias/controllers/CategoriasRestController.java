@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import prototipo.ocorrencias.models.Categoria;
 import prototipo.ocorrencias.repositories.CategoriaRepository;
 
@@ -28,12 +29,12 @@ public class CategoriasRestController {
 	}
 	
 	@PostMapping
-	public Categoria criarNovaCategoria(@RequestBody Categoria novaCategoria) {
+	public Categoria criarNovaCategoria(@Valid @RequestBody Categoria novaCategoria) {
 		return categoriaRepository.save(novaCategoria);
 	}
 	
 	@PutMapping("/{id}")
-    public Categoria atualizarCategoria(@PathVariable Long id, @RequestBody Categoria categoriaAtualizada) {
+    public Categoria atualizarCategoria(@PathVariable Long id, @Valid @RequestBody Categoria categoriaAtualizada) {
         return categoriaRepository.findById(id)
             .map(categoria -> {
                 categoria.setNome(categoriaAtualizada.getNome());
