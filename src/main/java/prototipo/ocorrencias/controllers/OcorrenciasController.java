@@ -229,7 +229,7 @@ public class OcorrenciasController {
 		Optional<Ocorrencia> opt = or.findById(id);
 		
 		if (result.hasErrors()) {
-			return "ocorrencias/detalhes";
+			return "redirect:/ocorrencias/listar_ocorrencias/" + id + "/detalhes";
 		}
 		
 		if (opt.isEmpty()) {
