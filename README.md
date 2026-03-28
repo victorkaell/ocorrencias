@@ -38,3 +38,10 @@ O sistema atual representa o MVP (Produto Mínimo Viável) focado no registro se
 
 **Próximas implementações mapeadas (v2):**
 * **Módulo de Relatórios:** A interface da aba "Relatórios" já está prototipada no Front-End, e o desenvolvimento do Back-End para geração de métricas e exportação de dados está mapeado para o próximo ciclo de evolução da aplicação.
+
+### 🛠️ API REST & Documentação
+
+Além da interface Web, o sistema dispõe de uma API RESTful para integração com outros serviços.
+
+* **Swagger UI (Documentação Interativa):** Com a aplicação rodando, acesse `http://localhost:8080/swagger-ui/index.html` para visualizar e testar os endpoints em tempo real.
+* **Postman:** Na pasta `/docs` deste repositório, você encontrará o arquivo `Ocorrencias_API_Collection.json`. Basta importá-lo no Postman para ter acesso a todos os testes de GET, POST, PUT e DELETE configurados.
