@@ -1,11 +1,12 @@
 package prototipo.ocorrencias.models;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Tratamento {
@@ -14,7 +15,8 @@ public class Tratamento {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(length = 501)
+	@NotBlank(message = "O gatilho não pode estar em branco.")
+	@Size(min = 5, max = 500, message = "O gatilho precisa ter entre 5 e 500 caracteres.")
 	private String metodo;
 
 	@ManyToOne

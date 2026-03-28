@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import prototipo.ocorrencias.dtos.OcorrenciaFiltroDTO;
 import prototipo.ocorrencias.models.Categoria;
 import prototipo.ocorrencias.models.Ocorrencia;
@@ -73,7 +75,12 @@ public class OcorrenciasController {
 	}
 	
 	@PostMapping("/cadastrar_ocorrencia")
-	public String cadastrarOcorrencia(Ocorrencia ocorrencia, Tratamento tratamento, @RequestParam String metodo, @RequestParam Categoria categoria) {
+	public String cadastrarOcorrencia(@Valid Ocorrencia ocorrencia, BindingResult result, @Valid Tratamento tratamento, @RequestParam String metodo, @RequestParam Categoria categoria) {
+		
+		if (result.hasErrors()) {
+			return "ocorrencias/form";
+		}
+		
 		ocorrencia.setCategoria(categoria.getNome());
 		ocorrencia.setTempo(LocalDateTime.of(ocorrencia.getData(), ocorrencia.getHorario()));
 		
@@ -218,8 +225,12 @@ public class OcorrenciasController {
 	}
 	
 	@PostMapping("/listar_ocorrencias/{id}/detalhes/adicionar")
-	public String adicionarTratamento(@PathVariable Long id, Tratamento tratamento, Usuario usuario, RedirectAttributes attributes) {
+	public String adicionarTratamento(@PathVariable Long id, @Valid Tratamento tratamento, BindingResult result, Usuario usuario, RedirectAttributes attributes) {
 		Optional<Ocorrencia> opt = or.findById(id);
+		
+		if (result.hasErrors()) {
+			return "ocorrencias/detalhes";
+		}
 		
 		if (opt.isEmpty()) {
 			return "redirect:/home";
@@ -274,8 +285,18 @@ public class OcorrenciasController {
 	}
 	
 	@PostMapping("/listar_ocorrencias/{id}/editar")
-	public ModelAndView editarOcorrencia(@PathVariable Long id, Usuario usuario, Ocorrencia ocorrencia, Tratamento tratamento, RedirectAttributes attributes, HttpServletRequest request, @RequestParam Long categoria) {
+	public ModelAndView editarOcorrencia(
+			@PathVariable Long id, 
+			@Valid Usuario usuario, BindingResult resultUsuario, 
+			@Valid Ocorrencia ocorrencia, BindingResult resultOcorrencia, 
+			@Valid Tratamento tratamento, BindingResult resultTratamento, 
+			RedirectAttributes attributes, HttpServletRequest request, @RequestParam Long categoria) {
 		ModelAndView mv = new ModelAndView();
+		
+		if (resultUsuario.hasErrors() || resultOcorrencia.hasErrors() || resultTratamento.hasErrors()) {
+			mv.setViewName("ocorrencias/edicao");
+			return mv;
+		}
 		
 		tr.save(tratamento);
 		

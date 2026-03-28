@@ -1,7 +1,7 @@
 package prototipo.ocorrencias.dtos;
 
 public class OcorrenciaFiltroDTO {
-
+	
 	private String filtro;
 	private String categoria;
 

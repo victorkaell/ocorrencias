@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.validation.Valid;
 import prototipo.ocorrencias.models.Categoria;
 import prototipo.ocorrencias.models.Usuario;
 import prototipo.ocorrencias.repositories.CategoriaRepository;
@@ -48,7 +50,11 @@ public class CategoriasController {
 	}
 	
 	@PostMapping("/adicionar_categoria")
-	public String adicionarCategoria(Categoria categoria, RedirectAttributes attributes) {
+	public String adicionarCategoria(@Valid Categoria categoria, BindingResult result, RedirectAttributes attributes) {
+		if (result.hasErrors()) {
+			return "categorias/form";
+		}
+		
 		List<Categoria> categorias = cr.findAll();
 		
 		for (int i = 0; i < categorias.size(); i++) {
