@@ -22,3 +22,19 @@ O projeto foi planejado e entregue antes do prazo estipulado, demonstrando não 
 2. Configure as credenciais do seu banco de dados MySQL no arquivo `application.properties`.
 3. Execute a classe principal do Spring Boot na sua IDE (Eclipse, IntelliJ, etc) ou via Maven.
 4. Acesse a aplicação no navegador via `http://localhost:8080`.
+
+### 🔑 Acesso e Testes (Dados Pré-carregados)
+
+Para facilitar a avaliação do sistema, o banco de dados é inicializado automaticamente com categorias e um usuário de teste. Você pode testar o fluxo de registro utilizando as seguintes credenciais:
+
+* **Matrícula:** 1234
+* **Senha:** 1234
+    
+> **Nota de Arquitetura:** O escopo principal deste projeto foi consolidar os fundamentos do mapeamento objeto-relacional com Hibernate e a **validação estrita de dados** no Back-End. As regras de negócio e a integridade das informações foram implementadas para garantir que o CRUD de ocorrências opere com consistência, servindo como uma base sólida para futuras implementações de camadas de segurança.
+
+### 🚧 Roadmap e Trabalhos Futuros
+
+O sistema atual representa o MVP (Produto Mínimo Viável) focado no registro seguro de ocorrências e controle de acesso de usuários. 
+
+**Próximas implementações mapeadas (v2):**
+* **Módulo de Relatórios:** A interface da aba "Relatórios" já está prototipada no Front-End, e o desenvolvimento do Back-End para geração de métricas e exportação de dados está mapeado para o próximo ciclo de evolução da aplicação.
