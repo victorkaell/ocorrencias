@@ -1,47 +1,34 @@
-# Sistema de Monitoramento de Ocorrências e Bem-Estar 
+# 🚀 [Refatoração 2026] API RESTful - Sistema de Monitoramento de Ocorrências e Bem-Estar
 
-## 📌 Sobre o Projeto
-Sistema web desenvolvido para o mapeamento e cadastro de ocorrências relacionadas à ansiedade e bem-estar, focado no atendimento da comunidade acadêmica (servidores, alunos e terceirizados) do IFRN Campus Lajes. 
+## 📌 Sobre o Projeto e a Evolução Arquitetural
+Este sistema nasceu em 2023 como um MVP para o mapeamento e cadastro de ocorrências relacionadas à ansiedade e bem-estar no IFRN Campus Lajes, focando no atendimento da comunidade acadêmica. O projeto original cumpriu seu papel com uma arquitetura MVC tradicional.
 
-O projeto foi planejado e entregue antes do prazo estipulado, demonstrando não apenas domínio técnico, mas também comprometimento com cronogramas e resolução de problemas reais de saúde institucional.
+**A Grande Atualização (2026):** O projeto passou por um intenso processo de modernização e desacoplamento. O legado foi refatorado para uma **API RESTful moderna**, projetada com foco em **Escalabilidade, Resiliência e Proteção de Rotas**, pronta para ser consumida por aplicações Front-End ou Mobile.
+
+## 🧠 Destaques da Arquitetura Back-End
+* **Resiliência e Tratamento de Erros:** Implementação de um **Global Exception Handler** (`@RestControllerAdvice`). A API intercepta exceções internas (evitando o vazamento de stacktraces/Erro 500) e devolve respostas JSON padronizadas (Erro 400/404) com mensagens claras.
+* **Segurança e Blindagem de Contrato:** Uso rigoroso de **Bean Validation** (`@Valid`, `@NotBlank`, `@NotNull`) para garantir a integridade dos dados e implementação de verificação de sessão e permissões diretamente nas rotas da API, barrando acessos não autorizados.
 
 ## 🚀 Tecnologias e Ferramentas Utilizadas
-* **Back-End:** Java, Spring Boot
-* **Persistência de Dados:** Hibernate, JPA, MySQL
-* **Front-End:** HTML, CSS (com foco em usabilidade e design responsivo)
-* **Validação:** Bean Validation
+* **Back-End:** Java 17+, Spring Boot 3, Spring Web (REST)
+* **Persistência de Dados:** Spring Data JPA, Hibernate, MySQL
+* **Documentação de API:** Swagger / OpenAPI 3.0
+* **Testes de Integração:** Postman (Collection nativa inclusa)
 
-## ⚙️ Funcionalidades Principais
-* Cadastro seguro e estruturado de usuários (alunos, servidores e terceirizados).
-* Registro e histórico de ocorrências.
-* Interface amigável para facilitar o relato e acompanhamento.
-* Mapeamento objeto-relacional estruturado com JPA/Hibernate.
-
-## 🛠️ Como executar este projeto
-1. Clone este repositório: `git clone github.com/victorkaell/ocorrencias`
+## 🛠️ Como executar e testar a API
+1. Clone este repositório: `git clone https://github.com/victorkaell/ocorrencias.git`
 2. Configure as credenciais do seu banco de dados MySQL no arquivo `application.properties`.
-3. Execute a classe principal do Spring Boot na sua IDE (Eclipse, IntelliJ, etc) ou via Maven.
-4. Acesse a aplicação no navegador via `http://localhost:8080`.
+3. Execute a classe principal do Spring Boot na sua IDE ou via Maven.
+4. A aplicação estará rodando em `http://localhost:8080`.
 
-### 🔑 Acesso e Testes (Dados Pré-carregados)
+### 📖 Swagger UI (Documentação Viva)
+A API é totalmente auto-documentada. Com o servidor rodando, acesse a interface interativa do Swagger para visualizar todos os endpoints (GET, POST, PUT, DELETE), os schemas de dados esperados e realizar testes direto pelo navegador:
+👉 **Acesse:** `http://localhost:8080/swagger-ui/index.html`
 
-Para facilitar a avaliação do sistema, o banco de dados é inicializado automaticamente com categorias e um usuário de teste. Você pode testar o fluxo de registro utilizando as seguintes credenciais:
+### ⚡ Testes via Postman
+Na pasta `/docs` deste repositório, você encontrará o arquivo `Ocorrencias_API_Collection.json`. Importe este arquivo no seu Postman para ter o ambiente de testes de requisições REST totalmente configurado.
 
-* **Matrícula:** 1234
+### 🔑 Acesso de Teste (Dados Pré-carregados)
+O banco de dados é inicializado automaticamente com dados de teste para facilitar a validação dos endpoints.
+* **Matrícula de Teste:** 1234
 * **Senha:** 1234
-    
-> **Nota de Arquitetura:** O escopo principal deste projeto foi consolidar os fundamentos do mapeamento objeto-relacional com Hibernate e a **validação estrita de dados** no Back-End. As regras de negócio e a integridade das informações foram implementadas para garantir que o CRUD de ocorrências opere com consistência, servindo como uma base sólida para futuras implementações de camadas de segurança.
-
-### 🚧 Roadmap e Trabalhos Futuros
-
-O sistema atual representa o MVP (Produto Mínimo Viável) focado no registro seguro de ocorrências e controle de acesso de usuários. 
-
-**Próximas implementações mapeadas (v2):**
-* **Módulo de Relatórios:** A interface da aba "Relatórios" já está prototipada no Front-End, e o desenvolvimento do Back-End para geração de métricas e exportação de dados está mapeado para o próximo ciclo de evolução da aplicação.
-
-### 🛠️ API REST & Documentação
-
-Além da interface Web, o sistema dispõe de uma API RESTful para integração com outros serviços.
-
-* **Swagger UI (Documentação Interativa):** Com a aplicação rodando, acesse `http://localhost:8080/swagger-ui/index.html` para visualizar e testar os endpoints em tempo real.
-* **Postman:** Na pasta `/docs` deste repositório, você encontrará o arquivo `Ocorrencias_API_Collection.json`. Basta importá-lo no Postman para ter acesso a todos os testes de GET, POST, PUT e DELETE configurados.
